@@ -42,6 +42,12 @@ app.get('/', async (req, res) => {
     });
 });
 
+app.get('/users/:userId/foods', async (req, res) => {
+    res.render('index.ejs', {
+        user: req.session.user,
+    });
+});
+
 app.get('/view-pantry', (req, res) => {
   if (req.session.user) {
     res.send(`Welcome to your pantry ${req.session.user.username}`);
