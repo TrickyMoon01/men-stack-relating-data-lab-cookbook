@@ -33,7 +33,7 @@ router.get('/sign-in', (req, res) => {
 });
 
 router.post('/sign-in', async (req, res) => {
-    const userInDataBase = await User.findOne({ username: req.body.username });
+    const userInDataBase = await User.findOne({ username: req.body.username }).populate('pantry');
 
     if (!userInDataBase) {
         return res.send('Login failed. Please try again.');
@@ -45,10 +45,7 @@ router.post('/sign-in', async (req, res) => {
         return res.send('Login failed. Please try again.')
     }
 
-    req.session.user = {
-        username: userInDataBase.username,
-        _id: userInDataBase._id
-    }
+    req.session.user = userInDataBase
 
 
     res.redirect('/');
