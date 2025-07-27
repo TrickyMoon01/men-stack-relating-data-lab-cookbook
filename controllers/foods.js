@@ -48,9 +48,24 @@ router
     });
 })
 .put('/:itemId', async (req, res) => {
-    //update
-const updatedItem = {}
-    res.status(201).json(updatedItem)
+   try{
+    const user = req.session.user;
+    if(user){
+      const itemId = req.params.itemId;
+      if(itemId){
+        await Food.deleteOne({_id:itemId})
+        res.locals.user.pantry = res.locals.user.pantry.filter(item=>item._id !== itemId)
+        res.redirect(`/users/${user._id}/foods`)
+      }else{
+        res.sendStatus(422)//wrong format
+      }
+    }else{
+      res.sendStatus(401)//unauthorized
+    }
+  }catch(e){
+    console.log(e.message)
+    res.redirect('/')
+  }
 })
 .delete('/:itemId', async (req, res) => {
    try{
@@ -75,9 +90,16 @@ const updatedItem = {}
 });
 
 router.get('/:itemId/edit', async (req, res) => {
-    res.render('foods/edit/index.ejs', {
+  const itemId = req.params.itemId
+  const item = await Food.findById(itemId);
+  if(item){
+    res.render('foods/edit.ejs', {
         user: req.session.user,
+        item:item
     });
+  }else{
+    res.sendStatus(404)
+  }
 });
 
 module.exports = router;
