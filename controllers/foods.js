@@ -52,9 +52,11 @@ router
     const user = req.session.user;
     if(user){
       const itemId = req.params.itemId;
+      const newName = req.body.name
       if(itemId){
-        await Food.deleteOne({_id:itemId})
-        res.locals.user.pantry = res.locals.user.pantry.filter(item=>item._id !== itemId)
+        await Food.findByIdAndUpdate(itemId,{$set:{name:newName}})
+        const index = res.locals.user.pantry.findIndex(item=>item._id === itemId)
+        res.locals.user.pantry[index].name = newName
         res.redirect(`/users/${user._id}/foods`)
       }else{
         res.sendStatus(422)//wrong format
