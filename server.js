@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const session = require('express-session');
 const authController = require('./controllers/auth.js');
 const foodsController = require('./controllers/foods.js');
+const usersController = require('./controllers/users.js');
 
 const isSignedIn = require('./middleware/is-signed-in.js');
 const passUserToView = require('./middleware/pass-user-to-view.js');
@@ -46,10 +47,13 @@ app.get('/view-pantry', (req, res) => {
   }
 });
 
+app.use('/explore', usersController);
+
 app.use(passUserToView);
 app.use('/auth', authController);
 app.use(isSignedIn);
 app.use('/users/:userId/foods', foodsController);
+
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
