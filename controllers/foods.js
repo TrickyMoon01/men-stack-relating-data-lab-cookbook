@@ -43,7 +43,7 @@ router.get('/new', async (req, res) => {
 
 router
 .get('/:itemId', async (req, res) => {
-    res.render('foods/index.ejs', {
+    res.render('foods/item.ejs', {
         user: req.session.user,
     });
 })

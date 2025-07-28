@@ -12,8 +12,7 @@
     <ul>
         <%users.forEach(function(user){ %>
           <li>
-            <p><%=user.username %></p>
-         
+            <a href="/explore/<%=user._id%>"><p><%=user.username %></p></a>
           </li>
         <%});%>
       </ul>
